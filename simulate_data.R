@@ -23,6 +23,8 @@ cat("Created new_mask_file.csv\n")
 
 # 2. Create Traps (Traps.csv)
 # Traps need to have: TrapID, X, Y, and then one column per occasion indicating if active
+# 10 Random traps within the grid
+n_traps <- 10
 traps <- data.frame(
   TrapID = 1:n_traps,
   X = sample(x, n_traps, replace = TRUE),
@@ -35,6 +37,9 @@ for (i in 1:n_occasions) {
   traps[[paste0("Active", i)]] <- 1
 }
 
+# Add binary columns for active/inactive (assuming 1 session for now, or just 'Active')
+# The code `MASK<-as.matrix(traps[,4:ncol(traps)])` implies columns 4 onwards are the mask
+traps$Active <- 1
 write.csv(traps, "Traps.csv", row.names = FALSE)
 cat("Created Traps.csv\n")
 
@@ -43,6 +48,13 @@ captures <- data.frame(
   LOC_ID = sample(1:n_traps, n_captures, replace = TRUE), # Trap ID
   ANIMAL_ID = sample(1:n_animals, n_captures, replace = TRUE),
   SO = sample(1:n_occasions, n_captures, replace = TRUE) # Sampling Occasion
+# 50 captures of 20 animals over 5 occasions
+n_animals <- 20
+n_captures <- 50
+captures <- data.frame(
+  LOC_ID = sample(1:n_traps, n_captures, replace = TRUE), # Trap ID
+  ANIMAL_ID = sample(1:n_animals, n_captures, replace = TRUE),
+  SO = sample(1:5, n_captures, replace = TRUE) # Sampling Occasion
 )
 write.csv(captures, "Capture.csv", row.names = FALSE)
 cat("Created Capture.csv\n")

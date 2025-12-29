@@ -91,6 +91,23 @@ tryCatch({
 
   # 4b. Run Model
   cat("Running analysis...\n")
+# --- 4. Prepare Data Object ---
+
+cat("Formatting data...\n")
+scrMaraLionData <- scrData(
+  traps = traps,
+  captures = captures,
+  statespace = statespace,
+  Xsex = Xsex,
+  Xeff = Xeffort
+)
+
+# --- 5. Run Model (Test Mode) ---
+
+cat("Running test model...\n")
+
+# Wrap in tryCatch to ensure the script exits with error code 1 if the model fails
+tryCatch({
   scrMaraLionAnal <- SCRi.fn.par1(
     scrMaraLionData,
     modelno = config$model_number,
@@ -119,5 +136,9 @@ tryCatch({
   cat("Test run FAILED with error:\n")
   print(e)
   # Force non-zero exit code so CI fails
+  cat("Test run completed successfully.\n")
+}, error = function(e) {
+  cat("Test run FAILED with error:\n")
+  print(e)
   quit(status = 1)
 })
