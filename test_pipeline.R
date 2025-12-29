@@ -72,6 +72,25 @@ source("e2dist.R")
 source("SCRi.fn.par1-cheetah_sex.R")
 source("scrDataWOeffort.R")
 
+# --- 4. Prepare & Run Model (Wrapped in tryCatch) ---
+
+cat("Running test pipeline...\n")
+
+# Wrap entire execution in tryCatch to catch errors in data prep or model run
+tryCatch({
+
+  # 4a. Format Data
+  cat("Formatting data...\n")
+  scrMaraLionData <- scrData(
+    traps = traps,
+    captures = captures,
+    statespace = statespace,
+    Xsex = Xsex,
+    Xeff = Xeffort
+  )
+
+  # 4b. Run Model
+  cat("Running analysis...\n")
 # --- 4. Prepare Data Object ---
 
 cat("Formatting data...\n")
@@ -110,6 +129,13 @@ tryCatch({
     maxNN = config$max_nn,
     dumprate = config$dumprate
   )
+
+  cat("Test run completed successfully.\n")
+
+}, error = function(e) {
+  cat("Test run FAILED with error:\n")
+  print(e)
+  # Force non-zero exit code so CI fails
   cat("Test run completed successfully.\n")
 }, error = function(e) {
   cat("Test run FAILED with error:\n")
