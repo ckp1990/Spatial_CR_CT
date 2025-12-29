@@ -48,13 +48,6 @@ captures <- data.frame(
   LOC_ID = sample(1:n_traps, n_captures, replace = TRUE), # Trap ID
   ANIMAL_ID = sample(1:n_animals, n_captures, replace = TRUE),
   SO = sample(1:n_occasions, n_captures, replace = TRUE) # Sampling Occasion
-# 50 captures of 20 animals over 5 occasions
-n_animals <- 20
-n_captures <- 50
-captures <- data.frame(
-  LOC_ID = sample(1:n_traps, n_captures, replace = TRUE), # Trap ID
-  ANIMAL_ID = sample(1:n_animals, n_captures, replace = TRUE),
-  SO = sample(1:5, n_captures, replace = TRUE) # Sampling Occasion
 )
 write.csv(captures, "Capture.csv", row.names = FALSE)
 cat("Created Capture.csv\n")
