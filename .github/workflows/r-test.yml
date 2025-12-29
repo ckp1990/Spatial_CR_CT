@@ -1,0 +1,31 @@
+name: R Analysis CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+
+      - name: Install dependencies
+        run: |
+          install.packages(c("doParallel", "foreach", "iterators", "codetools"))
+        shell: Rscript {0}
+
+      - name: Generate Simulated Data
+        run: Rscript simulate_data.R
+
+      - name: Run Analysis Pipeline (Test Mode)
+        run: Rscript test_pipeline.R
