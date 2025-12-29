@@ -264,21 +264,18 @@ S<-G[centers,]   # initial locations for all M individuals
 
 
 
-## Parallelize the operation (for Linux machines) ##
+## Parallelize the operation (Cross-platform) ##
+if (!requireNamespace("doParallel", quietly = TRUE)) {
+    stop("Package 'doParallel' is needed for this function to work. Please install it.")
+}
+require(doParallel)
+require(foreach)
 
-# Call the parallizing package #
-require(doMC) 
 # Register the cores #
-registerDoMC(nc)
-
-## Parallelize the operation (for Windows machines) ##
-#require(doSNOW)
-#library(doSNOW)
-#require(foreach)
-#library(foreach)
-
-#cl<-makeCluster(8) #change the 2 to your number of CPU cores
-#registerDoSNOW(cl)
+# Use makeCluster to be cross-platform (works on Windows and Linux)
+cl <- makeCluster(nc)
+registerDoParallel(cl)
+on.exit(stopCluster(cl), add = TRUE)
 
 # Parallelize the operations using "foreach" paradigm 
 
